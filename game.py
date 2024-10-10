@@ -6,7 +6,6 @@ from items import *
 from gameparser import *
 
 
-
 def list_of_items(items):
     """This function takes a list of items (see items.py for the definition) and
     returns a comma-separated list of item names (as a string). For example:
@@ -25,7 +24,9 @@ def list_of_items(items):
 
     """
     pass
+    # creating a new list of the names
     name_list = [item["name"] for item in items]
+    # join the list items, seperating with comma
     comma_seperated = ', '.join(name_list)
     return comma_seperated
 
@@ -53,6 +54,14 @@ def print_room_items(room):
 
     """
     pass
+    items = list_of_items(room["items"])
+    if len(items) <= 0:
+       return
+    print(f"There is {items} here.")
+    print()
+    
+    
+        
 
 
 def print_inventory_items(items):
@@ -123,7 +132,7 @@ def print_room(room):
     print()
 
     #
-    # COMPLETE ME!
+    print_room_items(room)
     #
 
 def exit_leads_to(exits, direction):
@@ -194,8 +203,11 @@ def print_menu(exits, room_items, inv_items):
         print_exit(direction, exit_leads_to(exits, direction))
 
     #
-    # COMPLETE ME!
+    for item in room_items:
+        print ("TAKE" + str(item["id"]).upper() + " to drop " + str[item["name"]] + ".") 
     #
+    for item in inv_items:
+        print("DROP" + str(item["id"]).upper() + " to drop " + str(item["name"]) + ".")
     
     print("What do you want to do?")
 
