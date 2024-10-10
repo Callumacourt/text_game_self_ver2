@@ -25,6 +25,9 @@ def list_of_items(items):
 
     """
     pass
+    name_list = [item["name"] for item in items]
+    comma_seperated = ', '.join(name_list)
+    return comma_seperated
 
 
 def print_room_items(room):
