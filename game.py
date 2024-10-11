@@ -5,7 +5,6 @@ from player import *
 from items import *
 from gameparser import *
 
-
 def list_of_items(items):
     """This function takes a list of items (see items.py for the definition) and
     returns a comma-separated list of item names (as a string). For example:
@@ -74,6 +73,11 @@ def print_inventory_items(items):
     <BLANKLINE>
 
     """
+    items = list_of_items(items)
+    if len(items) <= 0:
+        return
+    print(f"You have {items}.")
+    print()
     pass
 
 
@@ -204,10 +208,10 @@ def print_menu(exits, room_items, inv_items):
 
     #
     for item in room_items:
-        print ("TAKE" + str(item["id"]).upper() + " to drop " + str[item["name"]] + ".") 
+        print ("TAKE " + str(item["id"]).upper() + " to  " + str(item["name"]) + ".") 
     #
     for item in inv_items:
-        print("DROP" + str(item["id"]).upper() + " to drop " + str(item["name"]) + ".")
+        print("DROP " + str(item["id"]).upper() + " to drop " + str(item["name"]) + ".")
     
     print("What do you want to do?")
 
@@ -237,7 +241,15 @@ def execute_go(direction):
     (and prints the name of the room into which the player is
     moving). Otherwise, it prints "You cannot go there."
     """
+    
     pass
+    global current_room
+    exits = current_room["exits"]
+    if is_valid_exit(exits, direction):
+        current_room = rooms[current_room["exits"][direction]]
+        print_room(current_room)
+    else:
+        print("You cannot go there")
 
 
 def execute_take(item_id):
@@ -246,7 +258,22 @@ def execute_take(item_id):
     there is no such item in the room, this function prints
     "You cannot take that."
     """
-    pass
+    room_inventory = current_room["items"]
+    # Find item with matching ID
+    item_to_take = None
+    for item in room_inventory:
+        if item["id"] == item_id:
+            item_to_take = item
+            break
+    # If an item matches the ID, adjust inventories
+    if item_to_take:
+        room_inventory.remove(item_to_take)
+        inventory.append(item_to_take)
+        print(f"You have taken {item_to_take["name"]}.")
+    # Otherwise, inform player that they cannot take item
+    else:
+        print("You cannot take that")
+   
     
 
 def execute_drop(item_id):
@@ -254,6 +281,18 @@ def execute_drop(item_id):
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
+    item_to_drop = None
+    room_inventory = current_room["items"]
+    for item in inventory:
+        if item["id"] == item_id:
+            item_to_drop = item
+            break
+    if item_to_drop:
+        inventory.remove(item_to_drop)
+        room_inventory.append(item_to_drop)
+        print(f"You have dropped {item_to_drop}")
+    else:
+        print("You cannot drop that")
     pass
     
 
